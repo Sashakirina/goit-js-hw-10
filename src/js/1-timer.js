@@ -33,7 +33,6 @@ const options = {
         messageColor: '#FAFAFB',
       });
       startBtn.disabled = true;
-      
     }
   },
 };
@@ -41,18 +40,22 @@ const options = {
 flatpickr('#datetime-picker', options);
 
 startBtn.addEventListener(`click`, startTimer);
-
+let intervalId = null;
 
 function startTimer(event) {
-
-  setInterval(() => {
-  const currentTime = new Date(Date.now());
-  const deltaTime = convertMs(userSelectedDate - currentTime);
-  startBtn.disabled = true;
-  input.disabled = true;
-  updateTimer(deltaTime);
-  }, 1000)
-
+  intervalId = setInterval(() => {
+    const currentTime = new Date(Date.now());
+    const deltaTime = userSelectedDate - currentTime;
+    if (deltaTime <= 0) {
+      clearInterval(intervalId);
+      input.disabled = false;
+      return;
+    }
+    const deltaTimeConverted = convertMs(deltaTime);
+    startBtn.disabled = true;
+    input.disabled = true;
+    updateTimer(deltaTimeConverted);
+  }, 1000);
 }
 
 function convertMs(ms) {
@@ -69,15 +72,14 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-function addLeadingZero(value){
+function addLeadingZero(value) {
   return String(value).padStart(2, `0`);
 }
 
-function updateTimer(time){
- const { days, hours, minutes, seconds } = time;
- daysEl.textContent = addLeadingZero(days);
- hoursEl.textContent = addLeadingZero(hours)
- minutesEl.textContent = addLeadingZero(minutes);
- secondsEl.textContent = addLeadingZero(seconds);
+function updateTimer(time) {
+  const { days, hours, minutes, seconds } = time;
+  daysEl.textContent = addLeadingZero(days);
+  hoursEl.textContent = addLeadingZero(hours);
+  minutesEl.textContent = addLeadingZero(minutes);
+  secondsEl.textContent = addLeadingZero(seconds);
 }
-
