@@ -12,7 +12,7 @@ const minutesEl = document.querySelector('.field [data-minutes]');
 const secondsEl = document.querySelector('.field [data-seconds]');
 
 let userSelectedDate;
-startBtn.disabled = false;
+startBtn.disabled = true;
 
 const options = {
   enableTime: true,
